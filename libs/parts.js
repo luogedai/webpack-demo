@@ -2,6 +2,8 @@ const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const PurifyCSSPlugin = require('purifycss-webpack-plugin');
+const autoprefixer = require('autoprefixer');
+const precss = require('precss');
 
 exports.devServer = function(options) {
   return {
@@ -44,9 +46,13 @@ exports.setupCSS = function(paths) {
     module: {
       loaders: [{
         test: /\.css$/,
-        loaders: ['style', 'css'],
+        loaders: ['style', 'css', 'postcss'],
         include: paths
       }]
+    },
+    // PostCSS plugins go here
+    postcss: function() {
+      return [autoprefixer, precss];
     }
   };
 }
