@@ -4,6 +4,7 @@ const merge = require('webpack-merge');
 const validate = require('webpack-validator');
 const parts = require('./libs/parts');
 const pkg = require('./package.json');
+const stylelint = require('stylelint');
 
 const PATHS = {
   app: path.join(__dirname, 'app'),
@@ -32,7 +33,23 @@ const common = {
       title: 'Webpack demo'
     }),
     // new FaviconsWebpackPlugin('my-logo.png')
-  ]
+  ],
+  module: {
+    preLoaders: [{
+      test: /\.css$/,
+      loaders: ['postcss'],
+      include: PATHS.app
+    }, {
+      test: /\.jsx?$/,
+      loaders: ['eslint'],
+      include: PATHS.app
+    }]
+  },
+  postcss: function() {
+    return [
+      stylelint()
+    ];
+  }
 };
 
 var config;
